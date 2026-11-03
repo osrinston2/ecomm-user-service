@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:user_test_db;DB_CLOSE_DELAY=-1;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    enabled: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+security:
+  jwt:
+    issuer: ecomm-auth-service-test
+    auth-service-url: http://localhost:18081
+    jwks-uri: ""
+    public-key-uri: ""
+
+logging:
+  level:
+    root: WARN
+    com.ecomm.user: DEBUG
+

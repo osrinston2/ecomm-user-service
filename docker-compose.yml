@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: docker.io/library/mysql:8.0
+    container_name: ecomm-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ecomm_user_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ecomm-network
+
+  redis:
+    image: docker.io/library/redis:7.2-alpine
+    container_name: ecomm-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ecomm-network
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecomm-user-service
+    restart: on-failure
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8082
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ecomm_user_db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      AUTH_SERVICE_URL: http://ecomm-auth-service:8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecomm-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  ecomm-network:
+    driver: bridge
+

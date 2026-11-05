@@ -16,6 +16,13 @@ pipeline {
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                echo 'Running automated tests...'
+                bat '.\\mvnw.cmd -B test'
+            }
+        }
+
         stage('Build Application') {
             steps {
                 echo 'Building Spring Boot application...'

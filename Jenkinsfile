@@ -56,8 +56,8 @@ pipeline {
 
 
                 bat '''
-                    set "APPDATA=C:\Users\rinst\AppData\Roaming"
-                    set "PATH=C:\Users\rinst\AppData\Local\Programs\Podman;%PATH%"
+                    set "APPDATA=C:\\Users\\rinst\\AppData\\Roaming"
+                    set "PATH=C:\\Users\\rinst\\AppData\\Local\\Programs\\Podman;%PATH%"
                     
                     powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".\deploy-podman.ps1"
                     

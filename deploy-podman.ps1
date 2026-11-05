@@ -6,7 +6,15 @@ $ErrorActionPreference = "Stop"
 
 $Network = "ecomm-network"
 $UserContainer = "ecomm-user-service"
-$UserImage = "localhost/ecomm-user-service:local"
+$ImageTag = $env:IMAGE_TAG
+
+if ([string]::IsNullOrWhiteSpace($ImageTag)) {
+    throw "IMAGE_TAG environment variable was not provided by Jenkins."
+}
+
+$UserImage = "localhost/ecomm-user-service:$ImageTag"
+
+Write-Host "Deploying image: $UserImage" -ForegroundColor Cyan
 
 Write-Host "=== Deploying E-Commerce User Service ===" -ForegroundColor Cyan
 

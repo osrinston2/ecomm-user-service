@@ -6,15 +6,24 @@ $ErrorActionPreference = "Stop"
 
 $Network = "ecomm-network"
 $UserContainer = "ecomm-user-service"
+$ImageName = $env:IMAGE_NAME
 $ImageTag = $env:IMAGE_TAG
+$Image = "${ImageName}:${ImageTag}"
 
-if ([string]::IsNullOrWhiteSpace($ImageTag)) {
-    throw "IMAGE_TAG environment variable was not provided by Jenkins."
+if ([string]::IsNullOrWhiteSpace($ImageName) -or
+    [string]::IsNullOrWhiteSpace($ImageTag)) {
+    throw "IMAGE_NAME or IMAGE_TAG environment variable is missing."
 }
 
-$UserImage = "localhost/ecomm-user-service:$ImageTag"
+Write-Host "Verifying image: $Image" -ForegroundColor Cyan
 
-Write-Host "Deploying image: $UserImage" -ForegroundColor Cyan
+podman image exists $Image
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Image '$Image' does not exist. Build stage may have failed."
+}
+
+Write-Host "Deploying image: $Image" -ForegroundColor Cyan
 
 Write-Host "=== Deploying E-Commerce User Service ===" -ForegroundColor Cyan
 
@@ -76,7 +85,7 @@ podman run -d `
     -e REDIS_PORT=6379 `
     -e AUTH_SERVICE_URL=http://ecomm-auth-service:8081 `
     -e JWT_ISSUER=ecomm-auth-service `
-    $UserImage
+    $Image
 
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to start User Service."

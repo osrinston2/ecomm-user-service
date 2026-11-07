@@ -4,7 +4,7 @@ Enterprise-grade user profile, shipping/billing address book, and seller storefr
 
 ---
 
-## 🏛️ Architecture & Inter-Service Security
+## Architecture & Inter-Service Security
 
 ```mermaid
 flowchart TD
@@ -37,7 +37,7 @@ flowchart TD
 
 ---
 
-## 👥 Pre-Seeded Test Personas
+## Pre-Seeded Test Personas
 
 > [!WARNING]
 > These test personas and sample records are for **local development and demonstration testing only**. In a production deployment, ensure test seeds are disabled or removed and real secrets are injected via your cloud secret manager.
@@ -52,7 +52,7 @@ Matching `ecomm-auth-service`, default user profiles, customer addresses, and ve
 
 ---
 
-## 📡 REST API Endpoints
+## REST API Endpoints
 
 ### 1. User Profile Endpoints (`/api/v1/users`)
 | Method | Endpoint | Authorization | Description |
@@ -87,7 +87,7 @@ Matching `ecomm-auth-service`, default user profiles, customer addresses, and ve
 
 ---
 
-## 🚀 End-to-End Quick Test (with `ecomm-auth-service`)
+## End-to-End Quick Test (with `ecomm-auth-service`)
 
 ### 1. Obtain a JWT Access Token from `ecomm-auth-service` (Port 8081)
 ```bash
@@ -132,7 +132,7 @@ curl -X GET http://localhost:8082/api/v1/sellers/bob-tech-gadgets
 
 ---
 
-## 🐳 Running & Deploying
+## Running & Deploying
 
 ### Option 1: Podman Deployment (`deploy-podman.ps1`)
 Automatically detects if `ecomm-auth-pod` is running, creates `ecomm_user_db` inside the shared MySQL instance, and starts `ecomm-user-service` on port `8082`:

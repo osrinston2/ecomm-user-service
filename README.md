@@ -52,7 +52,10 @@ Matching `ecomm-auth-service`, default user profiles, customer addresses, and ve
 
 ---
 
-## REST API Endpoints
+## REST API Endpoints & Swagger UI
+
+- **Swagger UI (Interactive API Explorer)**: `http://localhost:8082/swagger-ui.html`
+- **OpenAPI 3.0 JSON Spec**: `http://localhost:8082/v3/api-docs`
 
 ### 1. User Profile Endpoints (`/api/v1/users`)
 | Method | Endpoint | Authorization | Description |

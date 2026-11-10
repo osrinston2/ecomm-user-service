@@ -11,6 +11,8 @@ import com.ecomm.user.entity.RoleName;
 import com.ecomm.user.entity.UserStatus;
 import com.ecomm.user.service.SellerProfileService;
 import com.ecomm.user.service.UserProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/admin")
+@Tag(name = "4. Admin & Support Management", description = "Platform user search, account status control, and merchant verification")
 public class AdminUserController {
 
     private final UserProfileService userProfileService;
@@ -34,6 +37,7 @@ public class AdminUserController {
 
     @GetMapping("/users")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPPORT')")
+    @Operation(summary = "Search and filter users (Paginated)", description = "Filter users by status, role, and keyword search across email, first name, and last name.")
     public ResponseEntity<ApiResponse<PagedResponse<UserSummaryResponse>>> searchUsers(
             @RequestParam(required = false) UserStatus status,
             @RequestParam(required = false) RoleName role,
@@ -48,6 +52,7 @@ public class AdminUserController {
 
     @PatchMapping("/users/{uuid}/status")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update user account status", description = "Activate, suspend, or mark a user account as deleted (ROLE_ADMIN only).")
     public ResponseEntity<ApiResponse<UserProfileResponse>> updateUserStatus(
             @PathVariable String uuid,
             @Valid @RequestBody UpdateUserStatusRequest request) {
@@ -57,6 +62,7 @@ public class AdminUserController {
 
     @PatchMapping("/sellers/{sellerUuid}/verification")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Verify or reject a seller storefront", description = "Approve (VERIFIED), reject (REJECTED), or suspend (SUSPENDED) a merchant storefront (ROLE_ADMIN only).")
     public ResponseEntity<ApiResponse<SellerProfileResponse>> updateSellerVerification(
             @PathVariable String sellerUuid,
             @Valid @RequestBody UpdateSellerVerificationRequest request) {
@@ -64,4 +70,3 @@ public class AdminUserController {
         return ResponseEntity.ok(ApiResponse.ok("Seller verification status updated successfully", updated));
     }
 }
-

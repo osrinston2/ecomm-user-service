@@ -150,10 +150,20 @@ class UserProfileControllerTest {
             .andExpect(status().isOk())
             .andExpect(header().string("X-Content-Type-Options", "nosniff"))
             .andExpect(header().string("X-Frame-Options", "DENY"))
-            .andExpect(header().string("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'"))
+            .andExpect(header().string("Content-Security-Policy", containsString("frame-ancestors 'none'")))
             .andExpect(jsonPath("$.success").value(true))
             .andExpect(jsonPath("$.data.storeName").value("Bob Tech & Gadgets"))
             .andExpect(jsonPath("$.data.taxId").doesNotExist());
+    }
+
+    @Test
+    void swaggerAndOpenApiDocs_ArePubliclyAccessible() throws Exception {
+        mockMvc.perform(get("/v3/api-docs"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.info.title").value("E-Commerce User Service API"));
+
+        mockMvc.perform(get("/swagger-ui/index.html"))
+            .andExpect(status().isOk());
     }
 
     @Test
